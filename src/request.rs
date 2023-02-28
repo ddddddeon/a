@@ -21,7 +21,7 @@ pub fn make_request(url: String, prompt: String) -> Result<String, Box<dyn std::
     }
 
     let p = Prompt {
-        max_tokens: 4097 - prompt_length,
+        max_tokens: MAX_TOKENS - prompt_length,
         model: String::from("text-davinci-003"),
         prompt: prompt,
         temperature: 0.2,
