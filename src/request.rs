@@ -13,6 +13,8 @@ use serde_json::{Value, from_str};
 
 pub fn make_request(url: String, prompt: String) -> Result<String, Box<dyn std::error::Error>> {
     let api_key = &env::var("OPENAI_API_KEY")?;
+    let max_tokens = 4097 - prompt.len() as u32;
+    let body = format!("{{ \"model\": \"text-davinci-003\", \"prompt\": \"{prompt}\", \"temperature\": 0.2, \"max_tokens\": {max_tokens} }}");
     let mut headers = HeaderMap::new();
     let mut auth = String::from("Bearer ");
     auth.push_str(api_key);
@@ -21,16 +23,11 @@ pub fn make_request(url: String, prompt: String) -> Result<String, Box<dyn std::
     headers.insert("Authorization", header);
     headers.insert("Content-Type", HeaderValue::from_str("application/json")?);
 
-    let max_tokens = 4097 - prompt.len() as i32;
-
-    let p = format!("{{ \"model\": \"text-davinci-003\", \"prompt\": \"{prompt}\", \"temperature\": 0.2, \"max_tokens\": {max_tokens} }}");
-
     let client = reqwest::blocking::Client::new();
     let mut res = client.post(url)
-        .body(p)
+        .body(body)
         .headers(headers)
         .send()?;
-
 
     let mut body = String::new();
     res.read_to_string(&mut body)?;
@@ -43,5 +40,4 @@ pub fn make_request(url: String, prompt: String) -> Result<String, Box<dyn std::
         .expect("JSON Parsing error!");
 
     Ok(String::from(answer))
-
 }
