@@ -23,8 +23,10 @@ fn main() {
     let mut response = String::from(response.strip_prefix("\n\n").unwrap());
     response.push_str("\n");
 
-    let mut ctx = ClipboardContext::new().unwrap();
-    ctx.set_contents(response.clone()).unwrap();
+    #[cfg(feature = "clipboard")] {
+        let mut ctx = ClipboardContext::new().unwrap();
+        ctx.set_contents(response.clone()).unwrap();
+    }
 
     PrettyPrinter::new()
         .input_from_bytes(response.as_bytes())
