@@ -4,6 +4,8 @@ use reqwest::{blocking::Client, header::{HeaderMap, HeaderValue}};
 use serde_json::{Value, from_str};
 use serde::{Deserialize, Serialize};
 
+const MAX_TOKENS: u32 = 4097;
+
 #[derive(Serialize, Deserialize)]
 struct Prompt {
     model: String,
@@ -13,8 +15,13 @@ struct Prompt {
 }
 
 pub fn make_request(url: String, prompt: String) -> Result<String, Box<dyn std::error::Error>> {
+    let prompt_length = prompt.len() as u32;
+    if prompt_length >= MAX_TOKENS {
+        return Err(format!("Prompt cannot exceed length of {} characters", MAX_TOKENS - 1).into());
+    }
+
     let p = Prompt {
-        max_tokens: 4097 - (prompt.len() as u32),
+        max_tokens: 4097 - prompt_length,
         model: String::from("text-davinci-003"),
         prompt: prompt,
         temperature: 0.2,
