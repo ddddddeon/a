@@ -1,20 +1,26 @@
 use std::env;
-use std::io::{self, Read};
-use http::{HeaderMap, HeaderValue};
-use reqwest;
+use std::io::{Read};
+use reqwest::{blocking::Client, header::{HeaderMap, HeaderValue}};
 use serde_json::{Value, from_str};
+use serde::{Deserialize, Serialize};
 
-// let p = Prompt {
-//         model: String::from("text-davinci-003"),
-//         prompt: prompt,
-//         temperature: 0.2,
-//         max_tokens: 4097 - (prompt.len() as i32),
-//     };
+#[derive(Serialize, Deserialize)]
+struct Prompt {
+    model: String,
+    prompt: String,
+    temperature: f32,
+    max_tokens: u32
+}
 
 pub fn make_request(url: String, prompt: String) -> Result<String, Box<dyn std::error::Error>> {
-    let api_key = &env::var("OPENAI_API_KEY")?;
-    let max_tokens = 4097 - prompt.len() as u32; //TODO ??
+    let p = Prompt {
+        max_tokens: 4097 - (prompt.len() as u32),
+        model: String::from("text-davinci-003"),
+        prompt: prompt,
+        temperature: 0.2,
+    };
 
+    let api_key = &env::var("OPENAI_API_KEY")?;
     let mut auth = String::from("Bearer ");
     auth.push_str(api_key);
 
@@ -22,9 +28,9 @@ pub fn make_request(url: String, prompt: String) -> Result<String, Box<dyn std::
     headers.insert("Authorization", HeaderValue::from_str(auth.as_str())?);
     headers.insert("Content-Type", HeaderValue::from_str("application/json")?);
 
-    let body = format!("{{ \"model\": \"text-davinci-003\", \"prompt\": \"{prompt}\", \"temperature\": 0.2, \"max_tokens\": {max_tokens} }}");
+    let body = serde_json::to_string(&p)?;
 
-    let client = reqwest::blocking::Client::new();
+    let client = Client::new();
     let mut res = client.post(url)
         .body(body)
         .headers(headers)

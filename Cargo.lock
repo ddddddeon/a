@@ -10,6 +10,7 @@ dependencies = [
  "clipboard",
  "http",
  "reqwest",
+ "serde",
  "serde_json",
 ]
 

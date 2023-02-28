@@ -13,8 +13,8 @@ fn main() {
 
     let lang = args[0].clone();
     let prompt = args.connect(" ");
-
     let url = String::from("https://api.openai.com/v1/completions");
+
     let response = request::make_request(url, prompt)
         .expect("Could not make request to API!");
 
