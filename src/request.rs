@@ -38,13 +38,11 @@ pub fn make_request(url: String, prompt: String) -> Result<String, Box<dyn std::
 
     let mut response_body = String::new();
     res.read_to_string(&mut response_body)?;
-
     let json_object: Value = from_str(&response_body)?;
-    let answer = json_object.get("choices")
-        .and_then(|value| value.get(0))
-        .and_then(|value| value.get("text"))
-        .and_then(|value| value.as_str())
-        .expect("JSON Parsing error!");
+    let answer = json_object["Choices"][0]["text"].as_str();
 
-    Ok(String::from(answer))
-}
+    match answer {
+        Some(a) => Ok(String::from(a)),
+        None => Err("JSON parse error".into()),
+    }
+ }
