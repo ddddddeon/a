@@ -1,8 +1,11 @@
-use std::env;
-use std::io::{Read};
-use reqwest::{blocking::Client, header::{HeaderMap, HeaderValue}};
-use serde_json::{Value, from_str};
+use reqwest::{
+    blocking::Client,
+    header::{HeaderMap, HeaderValue},
+};
 use serde::{Deserialize, Serialize};
+use serde_json::{from_str, Value};
+use std::env;
+use std::io::Read;
 
 const MAX_TOKENS: u32 = 4097;
 
@@ -11,7 +14,7 @@ struct Prompt {
     model: String,
     prompt: String,
     temperature: f32,
-    max_tokens: u32
+    max_tokens: u32,
 }
 
 pub fn make_request(url: String, prompt: String) -> Result<String, Box<dyn std::error::Error>> {
@@ -52,4 +55,4 @@ pub fn make_request(url: String, prompt: String) -> Result<String, Box<dyn std::
         Some(a) => Ok(String::from(a)),
         None => Err("JSON parse error".into()),
     }
- }
+}

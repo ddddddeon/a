@@ -17,13 +17,13 @@ fn main() {
     let prompt = args.join(" ");
     let url = String::from("https://api.openai.com/v1/completions");
 
-    let response = request::make_request(url, prompt)
-        .expect("Could not make request to API");
+    let response = request::make_request(url, prompt).expect("Could not make request to API");
 
     let mut response = String::from(response.strip_prefix("\n\n").unwrap());
     response.push_str("\n");
 
-    #[cfg(feature = "clipboard")] {
+    #[cfg(feature = "clipboard")]
+    {
         let mut ctx = ClipboardContext::new().unwrap();
         ctx.set_contents(response.clone()).unwrap();
     }
