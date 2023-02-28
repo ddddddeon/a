@@ -1,4 +1,6 @@
 use bat::PrettyPrinter;
+use copypasta_ext::prelude::*;
+use copypasta_ext::x11_fork::ClipboardContext;
 
 pub mod request;
 
@@ -12,7 +14,7 @@ fn main() {
     }
 
     let lang = args[0].clone();
-    let prompt = args.connect(" ");
+    let prompt = args.join(" ");
     let url = String::from("https://api.openai.com/v1/completions");
 
     let response = request::make_request(url, prompt)
@@ -20,6 +22,9 @@ fn main() {
 
     let mut response = String::from(response.strip_prefix("\n\n").unwrap());
     response.push_str("\n");
+
+    let mut ctx = ClipboardContext::new().unwrap();
+    ctx.set_contents(response.clone()).unwrap();
 
     PrettyPrinter::new()
         .input_from_bytes(response.as_bytes())

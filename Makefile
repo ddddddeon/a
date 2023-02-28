@@ -13,3 +13,7 @@ test:
 .PHONY: release
 release:
 	cargo build --release
+
+.PHONY: install
+install:
+	mv target/release/a /usr/bin/

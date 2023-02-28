@@ -39,7 +39,7 @@ pub fn make_request(url: String, prompt: String) -> Result<String, Box<dyn std::
     let mut response_body = String::new();
     res.read_to_string(&mut response_body)?;
     let json_object: Value = from_str(&response_body)?;
-    let answer = json_object["Choices"][0]["text"].as_str();
+    let answer = json_object["choices"][0]["text"].as_str();
 
     match answer {
         Some(a) => Ok(String::from(a)),
