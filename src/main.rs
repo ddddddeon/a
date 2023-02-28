@@ -13,8 +13,11 @@ fn main() {
 
     let lang = args[0].clone();
     let prompt = args.connect(" ");
-    let mut response = request::make_request(String::from("https://api.openai.com/v1/completions"), prompt).unwrap();
-    response = String::from(response.strip_prefix("\n\n").unwrap());
+
+    let url = String::from("https://api.openai.com/v1/completions");
+    let response = request::make_request(url, prompt)
+        .expect("Could not make request to API!");
+    let mut response = String::from(response.strip_prefix("\n\n").unwrap());
     response.push_str("\n");
 
     PrettyPrinter::new()

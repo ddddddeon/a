@@ -12,14 +12,14 @@ use serde_json::{Value, from_str};
 //     };
 
 pub fn make_request(url: String, prompt: String) -> Result<String, Box<dyn std::error::Error>> {
+    let api_key = &env::var("OPENAI_API_KEY")?;
     let mut headers = HeaderMap::new();
     let mut auth = String::from("Bearer ");
-    let api_key = &env::var("OPENAI_API_KEY").unwrap();
     auth.push_str(api_key);
 
-    let header = HeaderValue::from_str(auth.as_str()).unwrap();
+    let header = HeaderValue::from_str(auth.as_str())?;
     headers.insert("Authorization", header);
-    headers.insert("Content-Type", HeaderValue::from_str("application/json").unwrap());
+    headers.insert("Content-Type", HeaderValue::from_str("application/json")?);
 
     let max_tokens = 4097 - prompt.len() as i32;
 
@@ -40,7 +40,8 @@ pub fn make_request(url: String, prompt: String) -> Result<String, Box<dyn std::
         .and_then(|value| value.get(0))
         .and_then(|value| value.get("text"))
         .and_then(|value| value.as_str())
-        .unwrap(); // TODO handle
+        .expect("JSON Parsing error!");
 
     Ok(String::from(answer))
+
 }
