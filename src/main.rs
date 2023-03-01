@@ -28,5 +28,4 @@ fn main() {
     }
 
     util::pretty_print(&response, &mut lang);
-
 }

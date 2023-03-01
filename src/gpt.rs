@@ -67,6 +67,4 @@ impl GPTClient {
             None => Err("JSON parse error".into()),
         }
     }
-
-
 }
