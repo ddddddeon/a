@@ -18,5 +18,5 @@ jobs:
       run: cargo build --release --verbose
     - name: Package
       env:
-        CARGO_API_KEY: {{ secrets.CARGO_API_KEY }}
+        - CARGO_API_KEY: {{ secrets.CARGO_API_KEY }}
       run: echo $CARGO_API_KEY | cargo publish -
