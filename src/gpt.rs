@@ -4,7 +4,6 @@ use reqwest::{
 };
 use serde::{Deserialize, Serialize};
 use serde_json::{from_str, Value};
-use std::env;
 use std::io::Read;
 
 const MAX_TOKENS: u32 = 4097;

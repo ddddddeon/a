@@ -1,23 +1,5 @@
-use bat::PrettyPrinter;
-use bat::Syntax;
-use copypasta_ext::prelude::*;
-use copypasta_ext::x11_fork::ClipboardContext;
-
 pub mod gpt;
-
-fn lang_exists(lang: &String, langs: &Vec<Syntax>) -> bool {
-    for l in langs {
-        if &l.name.to_lowercase() == &lang.to_lowercase() {
-            return true;
-        }
-        for e in &l.file_extensions {
-            if e == &lang.to_lowercase() {
-                return true;
-            }
-        }
-    }
-    false
-}
+pub mod util;
 
 fn main() {
     let mut args: Vec<_> = std::env::args().collect();
@@ -40,19 +22,9 @@ fn main() {
 
     #[cfg(feature = "clipboard")]
     {
-        let mut ctx = ClipboardContext::new().unwrap();
-        ctx.set_contents(response.clone()).unwrap();
+        util::copy_to_clipboard(&response);
     }
 
-    let mut pp = PrettyPrinter::new();
+    util::pretty_print(&response, &mut lang);
 
-    let langs: Vec<_> = pp.syntaxes().collect();
-    if !lang_exists(&lang, &langs) {
-        lang = String::from("txt");
-    }
-
-    pp.input_from_bytes(response.as_bytes())
-        .language(&lang)
-        .print()
-        .unwrap();
 }
