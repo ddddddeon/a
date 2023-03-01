@@ -33,9 +33,6 @@ pub fn pretty_print(str: &String, lang: &String) {
 }
 
 pub fn copy_to_clipboard(str: &String) {
-    {
-        let mut ctx = ClipboardContext::new().unwrap();
-        ctx.set_contents(str.clone()).unwrap();
-    }
-
+    let mut ctx = ClipboardContext::new().unwrap();
+    ctx.set_contents(str.clone()).unwrap();
 }
