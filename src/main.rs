@@ -3,12 +3,17 @@ use bat::Syntax;
 use copypasta_ext::prelude::*;
 use copypasta_ext::x11_fork::ClipboardContext;
 
-pub mod request;
+pub mod gpt;
 
 fn lang_exists(lang: &String, langs: &Vec<Syntax>) -> bool {
     for l in langs {
-        if &l.name == lang {
+        if &l.name.to_lowercase() == &lang.to_lowercase() {
             return true;
+        }
+        for e in &l.file_extensions {
+            if e == &lang.to_lowercase() {
+                return true;
+            }
         }
     }
     false
@@ -25,9 +30,10 @@ fn main() {
 
     let mut lang = args[0].clone();
     let prompt = args.join(" ");
-    let url = String::from("https://api.openai.com/v1/completions");
+    let api_key = std::env::var("OPENAI_API_KEY").unwrap();
 
-    let response = request::make_request(url, prompt).expect("Could not make request to API");
+    let client = gpt::GPTClient::new(api_key);
+    let response = client.prompt(prompt).expect("Could not make request to API");
 
     let mut response = String::from(response.strip_prefix("\n\n").unwrap());
     response.push_str("\n");
