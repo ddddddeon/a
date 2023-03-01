@@ -15,10 +15,12 @@ fn main() {
     let api_key = std::env::var("OPENAI_API_KEY").unwrap();
 
     let client = gpt::GPTClient::new(api_key);
-    let response = client.prompt(prompt).expect("Could not make request to API");
+    let mut response = client.prompt(prompt).expect("Could not make request to API");
 
-    let mut response = String::from(response.strip_prefix("\n\n").unwrap());
     response.push_str("\n");
+    if let Some(r) = response.strip_prefix("\n\n") {
+        response = String::from(r);
+    }
 
     #[cfg(feature = "clipboard")]
     {
