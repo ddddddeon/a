@@ -13,9 +13,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Build
-      run: cargo build --release --verbose
+    #- uses: actions/checkout@v3
+    #- name: Build
+    #  run: cargo build --release --verbose
     - name: Package
       env:
         CARGO_API_KEY: ${{ secrets.CARGO_API_KEY }}
