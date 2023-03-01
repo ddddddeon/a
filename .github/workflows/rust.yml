@@ -19,4 +19,4 @@ jobs:
     - name: Package
       env:
         CARGO_API_KEY: ${{ secrets.CARGO_API_KEY }}
-      run: echo $CARGO_API_KEY | cargo publish -
+      run: echo $CARGO_API_KEY | cargo login - && cargo publish
