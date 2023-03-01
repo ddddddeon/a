@@ -17,3 +17,7 @@ release:
 .PHONY: install
 install:
 	mv target/release/a /usr/bin/
+
+.PHONY: publish
+publish:
+	cargo publish
