@@ -27,7 +27,6 @@ Invoke the `a` command followed by a prompt. If the first word in the prompt is 
 a python script that fetches a url
 a rust program that showcases its various features
 a yaml manifest describing a kubernetes deployment
-
 ```
 
 If installed with the `clipboard` feature (enabled by default), the output will be copied to the clipboard.
