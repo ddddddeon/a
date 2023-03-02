@@ -14,7 +14,7 @@ const TEMPERATURE: f32 = 0.2;
 
 type BoxResult<T> = Result<T, Box<dyn Error>>;
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 struct Prompt {
     model: String,
     prompt: String,
@@ -70,7 +70,7 @@ impl GPTClient {
 
         match answer {
             Some(a) => Ok(String::from(a)),
-            None => Err("JSON parse error".into()),
+            None => Err(format!("JSON parse error: {response_body}").into()),
         }
     }
 }
