@@ -28,7 +28,7 @@ pub struct GPTClient {
 }
 
 impl GPTClient {
-    pub fn new(api_key: String) -> GPTClient {
+    pub fn new(api_key: String) -> Self {
         GPTClient {
             api_key: api_key,
             url: String::from(OPENAI_API_URL),
