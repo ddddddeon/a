@@ -21,7 +21,7 @@ sudo apt install xorg-dev libxcb-composite0-dev
 ```
 
 ## Usage
-You will need an OpenAI Api key, and to set the environment variable `OPENAI_API_KEY`.
+You will need an OpenAI API key, and to set the environment variable `OPENAI_API_KEY`.
 
 Invoke the `a` command followed by a prompt. If the first word in the prompt is a programming language or file-format the pretty-printer recognizes, it will syntax highlight the output.
 
