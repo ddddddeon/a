@@ -12,7 +12,8 @@ fn main() {
 
     let mut lang = args[0].clone();
     let prompt = args.join(" ");
-    let api_key = std::env::var("OPENAI_API_KEY").unwrap();
+    let api_key = std::env::var("OPENAI_API_KEY")
+        .expect("Please set the OPENAI_API_KEY environment variable");
 
     let client = gpt::GPTClient::new(api_key);
     let mut response = client.prompt(prompt).expect("Could not make request to API");
