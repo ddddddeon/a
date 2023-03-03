@@ -7,6 +7,7 @@ CLI tool to generate code from GPT3 that pretty-prints the output by language, a
 ## Installation 
 ```
 cargo install a-gpt
+export OPENAI_API_KEY=sk-WEz... # from https://platform.openai.com/account/api-keys
 ```
 
 For local development:
