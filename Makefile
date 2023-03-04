@@ -21,3 +21,11 @@ install:
 .PHONY: publish
 publish:
 	cargo publish
+
+.PHONY: fmt
+fmt:
+	rustfmt **/*.rs
+
+.PHONY: lint
+lint:
+	cargo clippy

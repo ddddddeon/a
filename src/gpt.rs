@@ -4,8 +4,8 @@ use reqwest::{
 };
 use serde::{Deserialize, Serialize};
 use serde_json::{from_str, Value};
-use std::io::Read;
 use std::error::Error;
+use std::io::Read;
 
 const OPENAI_API_URL: &str = "https://api.openai.com/v1/completions";
 const OPENAI_MODEL: &str = "text-davinci-003";
@@ -30,7 +30,7 @@ pub struct GPTClient {
 impl GPTClient {
     pub fn new(api_key: String) -> Self {
         GPTClient {
-            api_key: api_key,
+            api_key,
             url: String::from(OPENAI_API_URL),
         }
     }
@@ -38,13 +38,17 @@ impl GPTClient {
     pub fn prompt(&self, prompt: String) -> BoxResult<String> {
         let prompt_length = prompt.len() as u32;
         if prompt_length >= MAX_TOKENS {
-            return Err(format!("Prompt cannot exceed length of {} characters", MAX_TOKENS - 1).into());
+            return Err(format!(
+                "Prompt cannot exceed length of {} characters",
+                MAX_TOKENS - 1
+            )
+            .into());
         }
 
         let p = Prompt {
             max_tokens: MAX_TOKENS - prompt_length,
             model: String::from(OPENAI_MODEL),
-            prompt: prompt,
+            prompt,
             temperature: TEMPERATURE,
         };
 
@@ -58,10 +62,7 @@ impl GPTClient {
         let body = serde_json::to_string(&p)?;
 
         let client = Client::new();
-        let mut res = client.post(&self.url)
-            .body(body)
-            .headers(headers)
-            .send()?;
+        let mut res = client.post(&self.url).body(body).headers(headers).send()?;
 
         let mut response_body = String::new();
         res.read_to_string(&mut response_body)?;
