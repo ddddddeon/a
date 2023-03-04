@@ -1,4 +1,4 @@
-use super::util::pretty_print;
+use super::util;
 use reqwest::{
     blocking::Client,
     header::{HeaderMap, HeaderValue},
@@ -73,7 +73,7 @@ impl GPTClient {
         match answer {
             Some(a) => Ok(String::from(a)),
             None => {
-                pretty_print(&response_body, "json");
+                util::pretty_print(&response_body, "json");
                 Err(format!("JSON parse error").into())
             }
         }
