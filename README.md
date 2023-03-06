@@ -26,10 +26,17 @@ You will need an OpenAI API key, and to set the environment variable `OPENAI_API
 
 Invoke the `a` command followed by a prompt. If the first word in the prompt is a programming language or file-format the pretty-printer recognizes, it will syntax highlight the output.
 
-```
+```bash
 a python script that fetches a url
 a rust program that showcases its various features
 a yaml manifest describing a kubernetes deployment
+```
+
+Invoking the command with no arguments will read from stdin, accepting input interactively or from a pipe. You can choose to include or not include the word "a" at the beginning your input string.
+
+```bash
+echo "python script that fetches a url" | a
+echo "a python script that fetches a url" | a
 ```
 
 If installed with the `clipboard` feature (enabled by default), the output will be copied to the clipboard.
