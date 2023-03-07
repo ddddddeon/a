@@ -17,6 +17,10 @@ serde_json = "1.0.93"
 name = "a"
 path = "src/main.rs"
 
+[lib]
+name = "a"
+path = "src/lib.rs"
+
 [features]
 clipboard = []
 
