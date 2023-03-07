@@ -3,7 +3,7 @@ name = "a-gpt"
 description = "a CLI tool to generate and pretty-print code snippets from GPT3"
 repository = "https://github.com/ddddddeon/a"
 license = "MIT"
-version = "0.2.0"
+version = "0.2.1"
 edition = "2021"
 
 [dependencies]
