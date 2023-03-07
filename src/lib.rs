@@ -64,7 +64,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn prompt_full_sentence() -> Result<(), Box<dyn Error>> {
+    fn gather_args_full_sentence() -> Result<(), Box<dyn Error>> {
         let prompt = String::from("a python script to parse args");
         let mut args: Vec<String> = prompt.split_whitespace().map(str::to_string).collect();
         let (prompt, lang) = gather_args(&mut args)?;
@@ -80,7 +80,7 @@ mod tests {
     }
 
     #[test]
-    fn prompt_one_arg() -> Result<(), Box<dyn Error>> {
+    fn gather_args_one_arg() -> Result<(), Box<dyn Error>> {
         let prompt = String::from("a");
         let mut args: Vec<String> = prompt.split_whitespace().map(str::to_string).collect();
         match gather_args(&mut args) {
@@ -90,7 +90,7 @@ mod tests {
     }
 
     #[test]
-    fn prompt_zero_args() -> Result<(), Box<dyn Error>> {
+    fn gather_args_zero_args() -> Result<(), Box<dyn Error>> {
         let prompt = String::from("\n");
         let mut args: Vec<String> = prompt.split_whitespace().map(str::to_string).collect();
         match gather_args(&mut args) {
