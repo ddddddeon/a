@@ -36,11 +36,13 @@ pub fn pretty_print(str: &str, lang: &str) {
 pub fn copy_to_clipboard(str: &str) -> Result<(), Box<dyn Error>> {
     let mut ctx = match ClipboardContext::new() {
         Ok(c) => c,
-        Err(e) => Err(format!(
-            "Cannot initialize clipboard context: {e}\n
+        Err(e) => {
+            return Err(format!(
+                "Cannot initialize clipboard context: {e}\n
                      Consider disabling the \"clipboard\" feature in Cargo.toml\n"
-        )
-        .into()),
+            )
+            .into())
+        }
     };
 
     match ctx.set_contents(str.to_owned()) {
