@@ -4,7 +4,7 @@ version = 3
 
 [[package]]
 name = "a-gpt"
-version = "0.2.5"
+version = "0.2.6"
 dependencies = [
  "bat",
  "copypasta-ext",
