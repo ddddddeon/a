@@ -23,7 +23,7 @@ sudo make install
 
 If the `clipboard` feature is enabled and you are running Ubuntu/Debian, you may need to install the following packages:
 ```
-sudo apt install xorg-dev libxcb-composite0-dev
+sudo apt install xorg-dev libxcb-composite0-dev xclip
 ```
 
 ## Usage
