@@ -4,9 +4,14 @@ CLI tool to generate code from GPT3 that pretty-prints the output by language, a
 
 ![tty](https://user-images.githubusercontent.com/6937171/221947920-9cf8ed65-9ead-490b-a3c3-e606012ee8ce.gif)
 
-## Installation 
+## Installation
+
 ```
 cargo install a-gpt
+
+# or to enable clipboard functionality:
+# cargo install a-gpt --features clipboard
+
 export OPENAI_API_KEY=sk-WEz... # from https://platform.openai.com/account/api-keys
 ```
 
@@ -39,4 +44,4 @@ echo "python script that fetches a url" | a
 echo "a python script that fetches a url" | a
 ```
 
-If installed with the `clipboard` feature (enabled by default), the output will be copied to the clipboard.
+If installed with the `clipboard` feature enabled, the output will be copied to the clipboard.
