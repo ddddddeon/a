@@ -71,7 +71,7 @@ mod tests {
         if lang != "python".to_string() || prompt != "python script to parse args".to_string() {
             return Err(format!(
                 "Expected lang to be \"python\", got {}\n
-                        Expected prompt to be \"python script to parse args\", got {}",
+                 Expected prompt to be \"python script to parse args\", got {}",
                 lang, prompt
             )
             .into());
