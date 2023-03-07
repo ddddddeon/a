@@ -23,20 +23,20 @@ struct Prompt {
     max_tokens: u32,
 }
 
-pub struct GPTClient {
+pub(crate) struct GPTClient {
     api_key: String,
     url: String,
 }
 
 impl GPTClient {
-    pub fn new(api_key: String) -> Self {
+    pub(crate) fn new(api_key: String) -> Self {
         GPTClient {
             api_key,
             url: String::from(OPENAI_API_URL),
         }
     }
 
-    pub fn prompt(&self, prompt: String) -> BoxResult<String> {
+    pub(crate) fn prompt(&self, prompt: String) -> BoxResult<String> {
         let prompt_length = prompt.len() as u32;
         if prompt_length >= MAX_TOKENS {
             return Err(format!(

@@ -5,7 +5,9 @@ use std::io;
 pub mod gpt;
 pub mod util;
 
-fn gather_args(args: &mut Vec<String>) -> Result<(String, String), Box<dyn Error>> {
+pub use util::*;
+
+pub fn gather_args(args: &mut Vec<String>) -> Result<(String, String), Box<dyn Error>> {
     let lang;
     let mut prompt = String::new();
 
@@ -36,18 +38,17 @@ fn gather_args(args: &mut Vec<String>) -> Result<(String, String), Box<dyn Error
         lang = args[0].clone();
         prompt = args.join(" ");
     }
+
     Ok((prompt, lang))
 }
 
-pub fn run(args: &mut Vec<String>) -> Result<(), Box<dyn Error>> {
-    let (prompt, lang) = gather_args(args)?;
-
+pub fn prompt(prompt: &str) -> Result<String, Box<dyn Error>> {
     let api_key = std::env::var("OPENAI_API_KEY")
         .expect("Please set the OPENAI_API_KEY environment variable");
 
     let client = GPTClient::new(api_key);
     let mut response = client
-        .prompt(prompt)
+        .prompt(prompt.to_string())
         .expect("Could not make request to API");
 
     while response.starts_with('\n') {
@@ -55,16 +56,7 @@ pub fn run(args: &mut Vec<String>) -> Result<(), Box<dyn Error>> {
     }
     response.push('\n');
 
-    #[cfg(feature = "clipboard")]
-    {
-        if let Err(e) = util::copy_to_clipboard(&response) {
-            println!("{}", e);
-        }
-    }
-
-    util::pretty_print(&response, &lang);
-
-    Ok(())
+    Ok(response)
 }
 
 #[cfg(test)]
