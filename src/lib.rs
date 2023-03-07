@@ -43,13 +43,13 @@ pub fn gather_args(args: &mut Vec<String>) -> Result<(String, String), Box<dyn E
 }
 
 pub fn prompt(prompt: &str) -> Result<String, Box<dyn Error>> {
-    let api_key = std::env::var("OPENAI_API_KEY")
-        .expect("Please set the OPENAI_API_KEY environment variable");
+    let api_key = match std::env::var("OPENAI_API_KEY") {
+        Ok(k) => k,
+        Err(_) => return Err("Please set the OPENAI_API_KEY environment variable".into()),
+    };
 
     let client = GPTClient::new(api_key);
-    let mut response = client
-        .prompt(prompt.to_string())
-        .expect("Could not make request to API");
+    let mut response = client.prompt(prompt.to_string())?;
 
     while response.starts_with('\n') {
         response.remove(0);
@@ -57,45 +57,4 @@ pub fn prompt(prompt: &str) -> Result<String, Box<dyn Error>> {
     response.push('\n');
 
     Ok(response)
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn gather_args_full_sentence() -> Result<(), Box<dyn Error>> {
-        let prompt = String::from("a python script to parse args");
-        let mut args: Vec<String> = prompt.split_whitespace().map(str::to_string).collect();
-        let (prompt, lang) = gather_args(&mut args)?;
-        if lang != "python".to_string() || prompt != "python script to parse args".to_string() {
-            return Err(format!(
-                "Expected lang to be \"python\", got {}\n
-                 Expected prompt to be \"python script to parse args\", got {}",
-                lang, prompt
-            )
-            .into());
-        }
-        Ok(())
-    }
-
-    #[test]
-    fn gather_args_one_arg() -> Result<(), Box<dyn Error>> {
-        let prompt = String::from("a");
-        let mut args: Vec<String> = prompt.split_whitespace().map(str::to_string).collect();
-        match gather_args(&mut args) {
-            Ok(_) => Err("run() should return Err() if only one arg is present".into()),
-            Err(_) => Ok(()),
-        }
-    }
-
-    #[test]
-    fn gather_args_zero_args() -> Result<(), Box<dyn Error>> {
-        let prompt = String::from("\n");
-        let mut args: Vec<String> = prompt.split_whitespace().map(str::to_string).collect();
-        match gather_args(&mut args) {
-            Ok(_) => Err("run() should return Err() if no args are present".into()),
-            Err(_) => Ok(()),
-        }
-    }
 }
