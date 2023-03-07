@@ -57,7 +57,9 @@ pub fn run(args: &mut Vec<String>) -> Result<(), Box<dyn Error>> {
 
     #[cfg(feature = "clipboard")]
     {
-        util::copy_to_clipboard(&response);
+        if let Err(e) = util::copy_to_clipboard(&response) {
+            println!("{}", e);
+        }
     }
 
     util::pretty_print(&response, &lang);

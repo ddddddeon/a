@@ -2,6 +2,7 @@ use bat::PrettyPrinter;
 use bat::Syntax;
 use copypasta_ext::prelude::*;
 use copypasta_ext::x11_fork::ClipboardContext;
+use std::error::Error;
 
 fn lang_exists(lang: &str, langs: &Vec<Syntax>) -> bool {
     for l in langs {
@@ -32,7 +33,26 @@ pub fn pretty_print(str: &str, lang: &str) {
         .unwrap();
 }
 
-pub fn copy_to_clipboard(str: &str) {
-    let mut ctx = ClipboardContext::new().unwrap();
-    ctx.set_contents(str.to_owned()).unwrap();
+pub fn copy_to_clipboard(str: &str) -> Result<(), Box<dyn Error>> {
+    let mut ctx = match ClipboardContext::new() {
+        Ok(c) => c,
+        Err(e) => {
+            return Err(format!(
+                "Cannot initialize clipboard context: {e}\n
+                     Consider disabling the \"clipboard\" feature in Cargo.toml\n"
+            )
+            .into())
+        }
+    };
+
+    match ctx.set_contents(str.to_owned()) {
+        Ok(_) => return Ok(()),
+        Err(e) => {
+            return Err(format!(
+                "Cannot write to clipboard: {e}\n
+                 Consider disabling the \"clipboard\" feature in Cargo.toml\n"
+            )
+            .into())
+        }
+    }
 }
