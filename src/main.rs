@@ -9,7 +9,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     #[cfg(feature = "clipboard")]
     {
         if let Err(e) = a::copy_to_clipboard(&response) {
-            println!("{}", e);
+            eprintln!("{}", e);
         }
     }
 

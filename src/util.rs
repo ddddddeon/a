@@ -39,7 +39,7 @@ pub fn copy_to_clipboard(str: &str) -> Result<(), Box<dyn Error>> {
         Err(e) => {
             return Err(format!(
                 "Cannot initialize clipboard context: {e}\n
-                     Consider disabling the \"clipboard\" feature in Cargo.toml\n"
+                 Consider recompiling with the \"clipboard\" feature disabled\n"
             )
             .into())
         }
@@ -48,8 +48,8 @@ pub fn copy_to_clipboard(str: &str) -> Result<(), Box<dyn Error>> {
     match ctx.set_contents(str.to_owned()) {
         Ok(_) => return Ok(()),
         Err(e) => Err(format!(
-            "Cannot write to clipboard: {e}\n
-                 Consider disabling the \"clipboard\" feature in Cargo.toml\n"
+            "Cannot initialize clipboard context: {e}\n
+             Consider recompiling with the \"clipboard\" feature disabled\n"
         )
         .into()),
     }
