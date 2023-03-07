@@ -1,4 +1,4 @@
-use a::{self};
+use a;
 use std::error::Error;
 
 fn main() -> Result<(), Box<dyn Error>> {
