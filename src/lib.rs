@@ -23,7 +23,7 @@ pub fn gather_args(args: &mut Vec<String>) -> Result<(String, String), Box<dyn E
         }
 
         let words: Vec<String> = prompt.split_whitespace().map(str::to_string).collect();
-        if words.len() < 1 {
+        if words.is_empty() {
             return Err("Please supply a prompt".into());
         }
 

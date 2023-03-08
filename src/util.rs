@@ -45,7 +45,7 @@ pub fn copy_to_clipboard(str: &str) -> Result<(), Box<dyn Error>> {
     };
 
     match ctx.set_contents(str.to_owned()) {
-        Ok(_) => return Ok(()),
+        Ok(_) => Ok(()),
         Err(e) => Err(format!(
             "Cannot initialize clipboard context: {e}\nConsider recompiling with the \"clipboard\" feature disabled\n"
         )

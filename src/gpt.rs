@@ -74,7 +74,7 @@ impl GPTClient {
             Some(a) => Ok(String::from(a)),
             None => {
                 util::pretty_print(&response_body, "json");
-                Err(format!("JSON parse error").into())
+                Err("JSON parse error".into())
             }
         }
     }
