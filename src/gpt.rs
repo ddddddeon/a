@@ -7,18 +7,25 @@ use serde::{Deserialize, Serialize};
 use serde_json::{from_str, Value};
 use std::error::Error;
 use std::io::Read;
+use std::time::Duration;
 
-const OPENAI_API_URL: &str = "https://api.openai.com/v1/completions";
-const OPENAI_MODEL: &str = "text-davinci-003";
-const MAX_TOKENS: u32 = 4097;
-const TEMPERATURE: f32 = 0.2;
+const OPENAI_API_URL: &str = "https://api.openai.com/v1/chat/completions";
+const OPENAI_MODEL: &str = "gpt-3.5-turbo";
+const MAX_TOKENS: u32 = 4000;
+const TEMPERATURE: f32 = 0.3;
 
 type BoxResult<T> = Result<T, Box<dyn Error>>;
 
 #[derive(Serialize, Deserialize, Debug)]
+struct Message {
+    role: String,
+    content: String,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
 struct Prompt {
     model: String,
-    prompt: String,
+    messages: Vec<Message>,
     temperature: f32,
     max_tokens: u32,
 }
@@ -46,11 +53,25 @@ impl GPTClient {
             .into());
         }
 
+        let system =
+            "You are a system that only generates code. Do not describe or contextualize the code. Do not apply any formatting or syntax highlighting. Do not wrap the code in a code block.";
+
+        let messages = vec![
+            Message {
+                role: "system".to_string(),
+                content: system.to_string(),
+            },
+            Message {
+                role: "user".to_string(),
+                content: prompt,
+            },
+        ];
+
         let p = Prompt {
             max_tokens: MAX_TOKENS - prompt_length,
             model: String::from(OPENAI_MODEL),
-            prompt,
             temperature: TEMPERATURE,
+            messages,
         };
 
         let mut auth = String::from("Bearer ");
@@ -62,13 +83,13 @@ impl GPTClient {
 
         let body = serde_json::to_string(&p)?;
 
-        let client = Client::new();
+        let client = Client::builder().timeout(Duration::from_secs(60)).build()?;
         let mut res = client.post(&self.url).body(body).headers(headers).send()?;
 
         let mut response_body = String::new();
         res.read_to_string(&mut response_body)?;
         let json_object: Value = from_str(&response_body)?;
-        let answer = json_object["choices"][0]["text"].as_str();
+        let answer = json_object["choices"][0]["message"]["content"].as_str();
 
         match answer {
             Some(a) => Ok(String::from(a)),
