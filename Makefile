@@ -1,18 +1,20 @@
+FEATURES=clipboard
+
 .PHONY: run
 run:
-	cargo run
+	cargo run --features $(FEATURES)
 
 .PHONY: build
 build:
-	cargo build
+	cargo build --features $(FEATURES)
 
 .PHONY: test
 test:
-	cargo test
+	cargo test --features $(FEATURES)
 
 .PHONY: release
 release:
-	cargo build --release
+	cargo build --release --features $(FEATURES)
 
 .PHONY: install
 install:
