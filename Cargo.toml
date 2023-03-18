@@ -3,12 +3,12 @@ name = "a-gpt"
 description = "a CLI tool to generate and pretty-print code snippets from ChatGPT"
 repository = "https://github.com/ddddddeon/a"
 license = "MIT"
-version = "0.3.1"
+version = "0.3.2"
 edition = "2021"
 
 [dependencies]
 bat = "0.22.1"
-copypasta-ext = "0.4.4"
+copypasta-ext = { version = "0.4.4", optional = true }
 reqwest = { version = "0.11.14", features = ["blocking"] }
 serde = { version = "1.0.152", features = ["derive"] }
 serde_json = "1.0.93"
@@ -22,6 +22,6 @@ name = "a"
 path = "src/lib.rs"
 
 [features]
-clipboard = []
+clipboard = ["dep:copypasta-ext"]
 
 default = []
