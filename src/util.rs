@@ -39,8 +39,7 @@ pub fn copy_to_clipboard(str: &str) -> Result<(), Box<dyn Error>> {
         Err(e) => {
             return Err(format!(
                 "Cannot initialize clipboard context: {e}\nConsider recompiling with the \"clipboard\" feature disabled\n"
-            )
-            .into())
+            ).into())
         }
     };
 
@@ -48,7 +47,6 @@ pub fn copy_to_clipboard(str: &str) -> Result<(), Box<dyn Error>> {
         Ok(_) => Ok(()),
         Err(e) => Err(format!(
             "Cannot initialize clipboard context: {e}\nConsider recompiling with the \"clipboard\" feature disabled\n"
-        )
-        .into()),
+        ).into()),
     }
 }
