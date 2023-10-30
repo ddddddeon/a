@@ -27,6 +27,10 @@ pub fn pretty_print(str: &str, lang: &str) {
         lang = "txt".to_owned();
     }
 
+    if std::env::var("NO_COLOR").is_ok() {
+        pp.colored_output(false);
+    }
+
     pp.input_from_bytes(str.as_bytes())
         .language(&lang)
         .print()
