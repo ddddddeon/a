@@ -1,8 +1,8 @@
-use gpt::GPTClient;
+use llm::LLMClient;
 use std::error::Error;
 use std::io;
 
-pub mod gpt;
+pub mod llm;
 pub mod util;
 
 pub use util::*;
@@ -42,13 +42,13 @@ pub fn gather_args(args: &mut Vec<String>) -> Result<(String, String), Box<dyn E
     Ok((prompt, lang))
 }
 
-pub fn prompt(prompt: &str) -> Result<String, Box<dyn Error>> {
-    let api_key = match std::env::var("OPENAI_API_KEY") {
-        Ok(k) => k,
-        Err(_) => return Err("Please set the OPENAI_API_KEY environment variable".into()),
-    };
-
-    let client = GPTClient::new(api_key);
+pub fn prompt(
+    prompt: &str,
+    model: &str,
+    api_key: &str,
+    base_url: &str,
+) -> Result<String, Box<dyn Error>> {
+    let client = LLMClient::new(model, base_url, api_key);
     let mut response = client.prompt(prompt.to_string())?;
 
     while response.starts_with('\n') {
